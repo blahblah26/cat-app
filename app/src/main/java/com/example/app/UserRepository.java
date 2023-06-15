@@ -1,4 +1,4 @@
-package com.example;
+package com.example.app;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
