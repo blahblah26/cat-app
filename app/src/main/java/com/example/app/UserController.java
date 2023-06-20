@@ -61,7 +61,8 @@ public class UserController {
     @PreAuthorize("#username == authentication.name")
     public void userDelete(@PathVariable("username") String username) {
         try {
-            userRepository.deleteUserByUsername(username);
+            User u = userRepository.getUserByUsername(username);
+            userRepository.delete(u);
         } catch (Exception e) {
             return;
         }
