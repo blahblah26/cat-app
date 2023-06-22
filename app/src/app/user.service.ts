@@ -48,6 +48,6 @@ export class UserService {
   }
 
   createUser(user: {username: string, password: string, email: string, profilePicture: string}) {
-    return this.http.put('createuser/' + user.username, user).pipe();
+    return this.http.put('user/create', user).pipe();
   }
 }

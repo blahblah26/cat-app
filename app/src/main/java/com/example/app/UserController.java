@@ -68,8 +68,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/createuser/{username}")
-    public void userPut(@PathVariable("username") String username, @RequestBody UserForm userForm) {
+    @PutMapping("/user/create")
+    public void userPut(@RequestBody UserForm userForm) {
         try {
             userRepository.insertUser(userForm.getUsername(), userForm.getPassword(), userForm.getEmail(), userForm.getProfilePicture(), "user");
         } catch (Exception e) {

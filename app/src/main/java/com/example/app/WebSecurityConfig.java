@@ -48,8 +48,10 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((authz) -> 
-            authz.requestMatchers(AntPathRequestMatcher.antMatcher("/login"),
-            AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS, "/**")).permitAll()
+            authz.requestMatchers(AntPathRequestMatcher.antMatcher("/"),
+            AntPathRequestMatcher.antMatcher("/login"),
+            AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS, "/**"),
+            AntPathRequestMatcher.antMatcher("/user/create")).permitAll()
             .anyRequest().authenticated()).httpBasic(withDefaults());
         return http.build();
     }
