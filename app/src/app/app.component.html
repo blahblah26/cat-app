@@ -1,10 +1,1 @@
-<form (submit)="login()">
-  <input type="text" class="form-control" id="username" name="username" [(ngModel)]="credentials.username"/>
-  <input type="password" class="form-control" id="password" name="password" [(ngModel)]="credentials.password"/>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-<div *ngIf="authenticated">You are in! CONGRATS</div>
-<div *ngIf="authenticated && (user | async) as user">Hello user! {{user.username}},
-  {{user.password}}, {{user.email}}, {{user.profilePicture}}, {{user.role}}
-</div> 
+<router-outlet></router-outlet>

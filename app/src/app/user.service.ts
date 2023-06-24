@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { user } from './user';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { user } from './user';
 })
 export class UserService {
   authenticated: boolean = false;
+  credentials = {username: '', password: ''};
 
   constructor(private http: HttpClient) { }
 
@@ -17,37 +18,58 @@ export class UserService {
 
   login(credentials: {username: string, password: string}): boolean {
     this.authenticate(credentials).subscribe((result) => this.authenticated = result);
+    if (this.authenticated) {
+      this.credentials = credentials;
+    }
     return this.authenticated;
   }
 
-  getUser(credentials: {username: string, password: string}): Observable<user> {
+  getUser() {
+    if (!this.authenticated) {
+      // TODO: redirect to login page
+      return undefined;
+    }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+        'Authorization': 'Basic ' + btoa(this.credentials.username + ':' + this.credentials.password)
       })
     };
-    return this.http.get<user>('user/' + credentials.username, httpOptions).pipe();
+    return this.http.get<user>('user/' + this.credentials.username, httpOptions).pipe();
   }
 
-  changeUser(credentials: {username: string, password: string}, user: {username: string, password: string, email: string, profilePicture: string}) {
+  changeUser(user: {username: string, password: string, email: string, profile: string}) {
+    if (!this.authenticated) {
+      // TODO: redirect to login page
+      return undefined;
+    }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+        'Authorization': 'Basic ' + btoa(this.credentials.username + ':' + this.credentials.password)
       })
     };
-    return this.http.post<void>('user/' + credentials.username, user, httpOptions).pipe();
+    return this.http.post<void>('user/' + this.credentials.username, user, httpOptions).pipe();
   }
 
-  deleteUser(credentials: {username: string, password: string}) {
+  deleteUser() {
+    if (!this.authenticated) {
+      // TODO: redirect to login page
+      return undefined;
+    }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+        'Authorization': 'Basic ' + btoa(this.credentials.username + ':' + this.credentials.password)
       })
     };
-    return this.http.delete<void>('user/' + credentials.username, httpOptions).pipe();
+    return this.http.delete<void>('user/' + this.credentials.username, httpOptions).pipe(tap(() => this.logout()));
   }
 
-  createUser(user: {username: string, password: string, email: string, profilePicture: string}) {
+  createUser(user: {username: string, password: string, email: string, profile: string}) {
     return this.http.put('user/create', user).pipe();
+  }
+
+  logout() {
+    this.authenticated = false;
+    this.credentials = {username: '', password: ''};
+    // TODO: redirect to login page
   }
 }

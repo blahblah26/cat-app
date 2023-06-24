@@ -1,0 +1,6 @@
+<div *ngIf="catList$">
+    <ul>
+        <li *ngFor="let cat of (catList$ | async)">id = {{cat.id}}, name = {{cat.name}}, user_id = {{cat.user_id}}, picture = {{cat.picture}}</li>
+    </ul>
+</div>
+<div *ngIf="!catList$">Could not retrieve cats for user {{username}}. <a routerLink="/login">Log in</a></div>

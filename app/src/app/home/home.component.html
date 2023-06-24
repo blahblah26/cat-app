@@ -1,0 +1,6 @@
+<div *ngIf="authenticated">
+    <app-user></app-user>
+    <app-catlist [username]="getUsername()"></app-catlist>
+    <button (click)="logout()">Log out</button>
+</div>
+<div *ngIf="!authenticated">Please <a routerLink="/login">log in</a> to view details! Or, create an account.</div>

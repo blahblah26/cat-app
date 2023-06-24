@@ -1,7 +1,9 @@
 package com.example.app;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +22,37 @@ public class CatController {
     @Autowired
     private UserRepository userRepository;
 
-    // TODO: authorization using an isAuthorized function
-    @GetMapping("/cat/{catName}")
-    @PostAuthorize("#username == authentication.name")
-    public Cat getCatByName(@PathVariable("catName") String catName) {
+    @SuppressWarnings("unused")
+    private boolean isAuthorized(String catName, String username) {
         try {
             Cat cat = catRepository.getCatByName(catName);
             User user = userRepository.findById(cat.getUser_id()).get();
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    @GetMapping("/cat/{catName}")
+    @PreAuthorize("isAuthorized(#catName, authentication.name)")
+    public Cat getCatByName(@PathVariable("catName") String catName) {
+        try {
+            Cat cat = catRepository.getCatByName(catName);
             return cat;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping("/user/{username}/cats")
+    @PreAuthorize("#username = authentication.name")
+    public List<Cat> getCatByUsername(@PathVariable("username") String username) {
+        try {
+            return catRepository.getCatByUsername(username);
         } catch (Exception e) {
             return null;
         }
@@ -43,7 +68,7 @@ public class CatController {
     }
 
     @PostMapping("/cat/{catName}")
-    @PostAuthorize("")
+    @PreAuthorize("isAuthorized(#catName, authentication.name)")
     public void catPost(@RequestBody CatForm catForm) {
         try {
             catRepository.updateCat(catForm.getName(), catForm.getPicture());
@@ -53,7 +78,7 @@ public class CatController {
     }
 
     @DeleteMapping("/cat/{catName}")
-    @PostAuthorize("")
+    @PreAuthorize("isAuthorized(#catName, authentication.name)")
     public void catDelete(@PathVariable("catName") String catName) {
         try {
             catRepository.delete(catRepository.getCatByName(catName));

@@ -25,7 +25,7 @@ public class User {
     private String email;
 
     @Column(name = "profile")
-    private String profilePicture;
+    private String profile;
 
     @Column(name = "role")
     private String role;
@@ -48,11 +48,11 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getProfilePicture() {
-        return profilePicture;
+    public String getProfile() {
+        return profile;
     }
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
+    public void setProfile(String profile) {
+        this.profile= profile;
     }
     public String getRole() {
         return role;
