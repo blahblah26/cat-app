@@ -1,2 +1,7 @@
-<div *ngIf="(cat$ | async) as cat">Cat: {{cat.id}}, {{cat.name}}, {{cat.user_id}}, {{cat.picture}}</div>
-<div *ngIf="!cat$">Cannot display details of {{catName}}</div>
+<div *ngIf="cat">
+    Cat: 
+    <input id="picture" [(ngModel)]="cat.picture">
+    Current details: {{cat.id}}, {{cat.name}}, {{cat.user_id}}, {{cat.picture}}
+    <button (click)="save()">Update cat</button>
+</div>
+<div *ngIf="!cat">Cannot display details of {{catName}}</div>

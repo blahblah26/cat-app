@@ -1,6 +1,16 @@
 <div *ngIf="catList$">
     <ul>
-        <li *ngFor="let cat of (catList$ | async)">id = {{cat.id}}, name = {{cat.name}}, user_id = {{cat.user_id}}, picture = {{cat.picture}}</li>
+        <li *ngFor="let cat of (catList$ | async)">
+            <a routerLink="/cat/{{cat.name}}">View Details</a>
+            id = {{cat.id}}, name = {{cat.name}}, user_id = {{cat.user_id}}, picture = {{cat.picture}}
+            <button (click)="delete(cat)">Delete this cat</button>
+        </li>
     </ul>
+    <form (submit)="create()">
+        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newcat.name"/>
+        <input type="text" class="form-control" id="id" name="id" [(ngModel)]="newcat.user_id"/>
+        <input type="text" class="form-control" id="picture" name="picture" [(ngModel)]="newcat.picture"/>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 <div *ngIf="!catList$">Could not retrieve cats for user {{username}}. <a routerLink="/login">Log in</a></div>
