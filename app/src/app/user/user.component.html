@@ -1,1 +1,10 @@
-<p>user works!</p>
+<div *ngIf="user">
+    <form (submit)="updateUser()">
+        {{user.username}}
+        <input type="text" class="form-control" id="password" name="password" [(ngModel)]="user.password"/>
+        <input type="text" class="form-control" id="email" name="email" [(ngModel)]="user.email"/>
+        <input type="text" class="form-control" id="profile" name="profile" [(ngModel)]="user.profile"/>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<div *ngIf="!user">Unable to retrieve the user {{user}}</div>
